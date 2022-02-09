@@ -1,0 +1,23 @@
+﻿@model Movie
+
+<div class="movie">
+    <a asp-action="Detail" asp-controller="Home" asp-route-id="@Model.Id" class="text-light">
+        <img src="@Url.Content("~/img/" + Model.PosterImagePath)" alt="" />
+        <div class="movie-info">
+
+            <h3>@Model.Title</h3>
+
+            @{
+                string color = "";
+                if (Model.Score >= 8)
+                    color = "green";
+                else if (Model.Score >= 5)
+                    color = "orange";
+                else
+                    color = "red";
+                <span class="@color">@Model.Score</span>
+            }
+
+        </div>
+    </a>
+</div>

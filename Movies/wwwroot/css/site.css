@@ -1,0 +1,110 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400&display=swap');
+
+:root {
+    --primary-color: #22254b;
+    --secondary-color: #373b69;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+header {
+    background-color: var(--secondary-color);
+}
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+
+body{
+    background-color:var(--primary-color);
+    font-family:'Poppins', sans-serif;
+    margin:0;
+}
+
+.search{
+    background-color:transparent;
+}
+
+main {
+    display: flex;
+    flex-wrap:wrap;
+    justify-content: center;
+}
+
+.movie{
+    width:300px;
+    margin:1rem;
+    background-color:var(--secondary-color);
+    position:relative;
+    overflow:hidden;
+    border-radius:3px;
+}
+
+.movie img {
+    width:100%;
+}
+
+.movie-info{
+    color:#eee;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0.5rem 1rem 1rem;
+}
+.movie-info h3{
+    margin-top:0;
+}
+
+.movie a {
+    text-decoration: none;
+}
+
+.movie-info span {
+    background-color: var(--primary-color);
+    padding: 0.25rem 0.5rem;
+    border-radius:5px;
+    font-weight:bold;
+}
+
+span.green{
+    color:lightgreen;
+}
+
+span.orange {
+    color: orange;
+}
+span.red {
+    color: red;
+}
+
+
+/*MOVIE ADMIN*/
+.movie-admin {
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 700px;
+    padding: 20px;
+}
+
+.movie-poster img{
+    width:300px;
+}
+
+/*Login Page*/
+.login-password {
+    padding:90px 0 0 0;
+}
