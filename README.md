@@ -1,4 +1,4 @@
-ASP .Net Core REST Movie App
+ASP .Net Core CRUD Movie App
 
 
 Muestra peliculas en la base de datos, permite busqueda y loguearte a una cuenta para administrar pudiendo crear, editar y borrar peliculas
