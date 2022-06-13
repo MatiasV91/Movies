@@ -13,29 +13,22 @@ namespace Movies.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IMovieRepository _movieRepository;
 
-        public HomeController(ApplicationDbContext context)
+        public HomeController(IMovieRepository movieRepository)
         {
-            _context = context;
+            _movieRepository = movieRepository;
         }
-
 
         public async Task<IActionResult> Index(string searchString)
         {
-            var movies = _context.Movies.Select(m => m);
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                movies = movies.Where(m => m.Title.Contains(searchString));
-            }
-
-            return View(await movies.ToListAsync());
+            return View(await _movieRepository.GetMoviesAsync(searchString));
         }
 
 
-        public IActionResult Detail(int id)
+        public async Task<IActionResult> Detail(int id)
         {
-            var movie = _context.Movies.FirstOrDefault(m => m.Id == id);
+            var movie = await _movieRepository.GetAsync(id);
             if (movie == null)
                 return NotFound();
             return View(movie);

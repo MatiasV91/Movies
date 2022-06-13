@@ -14,30 +14,25 @@ namespace Movies.Controllers
 {
     public class MoviesAdminController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IMovieRepository _movieRepository;
         private string[] permittedExtensions = { ".png", ".jpg", ".jpeg" };
 
-        public MoviesAdminController(ApplicationDbContext context)
+        public MoviesAdminController(IMovieRepository movieRepository)
         {
-            _context = context;
+            _movieRepository = movieRepository;
         }
 
         // GET: MoviesAdmin
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Movies.ToListAsync());
+            return View(await _movieRepository.GetMoviesAsync());
         }
 
         // GET: MoviesAdmin/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var movie = await _context.Movies
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var movie = await _movieRepository.GetAsync(id);
             if (movie == null)
             {
                 return NotFound();
@@ -65,13 +60,7 @@ namespace Movies.Controllers
             }
             if (ModelState.IsValid)
             {
-                if (movie.PosterToUpload != null)
-                {
-                    string filename = await SaveImage(movie.PosterToUpload);
-                    movie.PosterImagePath = filename;
-                }
-                _context.Add(movie);
-                await _context.SaveChangesAsync();
+                await _movieRepository.AddAsync(movie);
                 return RedirectToAction(nameof(Index));
             }
             return View(movie);
@@ -80,14 +69,9 @@ namespace Movies.Controllers
 
       
         // GET: MoviesAdmin/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var movie = await _context.Movies.FindAsync(id);
+            var movie = await _movieRepository.GetAsync(id);
             if (movie == null)
             {
                 return NotFound();
@@ -109,44 +93,16 @@ namespace Movies.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    if (movie.PosterToUpload != null)
-                    {
-                        if(!String.IsNullOrEmpty(movie.PosterImagePath))
-                            DeleteImage(movie.PosterImagePath);
-                        string filename = await SaveImage(movie.PosterToUpload);
-                        movie.PosterImagePath = filename;
-                    }
-                    _context.Update(movie);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MovieExists(movie.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _movieRepository.UpdateAsync(movie);
                 return RedirectToAction(nameof(Index));
             }
             return View(movie);
         }
 
         // GET: MoviesAdmin/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var movie = await _context.Movies
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var movie = await _movieRepository.GetAsync(id);
             if (movie == null)
             {
                 return NotFound();
@@ -160,18 +116,12 @@ namespace Movies.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var movie = await _context.Movies.FindAsync(id);
-            DeleteImage(movie.PosterImagePath);
-            _context.Movies.Remove(movie);
-            await _context.SaveChangesAsync();
+            var movie = await _movieRepository.GetAsync(id);
+            if (movie == null)
+                return NotFound();
+            await _movieRepository.DeleteAsync(movie);
             return RedirectToAction(nameof(Index));
         }
-
-        private bool MovieExists(int id)
-        {
-            return _context.Movies.Any(e => e.Id == id);
-        }
-
 
         private void ValidateIMGUpload(Movie movie)
         {
@@ -179,28 +129,6 @@ namespace Movies.Controllers
             if (!permittedExtensions.Contains(ext))
             {
                 ModelState.AddModelError(nameof(movie.PosterToUpload), "Only supported Image formats are JPG and PNG");
-            }
-        }
-
-        private async Task<string> SaveImage(IFormFile file)
-        {
-            var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
-            var filename = Guid.NewGuid().ToString() + ext;
-            var path = Path.GetFullPath("./wwwroot/img/") + filename;
-
-            using (var stream = new FileStream(path, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-            return filename;
-        }
-
-        private void DeleteImage(string filename)
-        {
-            var path = Path.GetFullPath("./wwwroot/img/") + filename;
-            if (System.IO.File.Exists(path))
-            {
-                System.IO.File.Delete(path);
             }
         }
     }

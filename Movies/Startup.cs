@@ -41,6 +41,7 @@ namespace Movies
             services.AddRazorPages();
             services.AddHttpClient();
             services.AddScoped<ITheMovieDbService, TheMovieDbService>();
+            services.AddScoped<IMovieRepository, MovieRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
