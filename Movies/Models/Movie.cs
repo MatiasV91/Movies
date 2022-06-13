@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Movies.Helper;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -24,6 +25,7 @@ namespace Movies.Models
 
         [Display(Name = "Upload Image : ")]
         [NotMapped]
+        [ValidImage]
         public IFormFile PosterToUpload { get; set; }
     }
 }

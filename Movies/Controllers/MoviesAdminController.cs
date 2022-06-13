@@ -15,7 +15,6 @@ namespace Movies.Controllers
     public class MoviesAdminController : Controller
     {
         private readonly IMovieRepository _movieRepository;
-        private string[] permittedExtensions = { ".png", ".jpg", ".jpeg" };
 
         public MoviesAdminController(IMovieRepository movieRepository)
         {
@@ -54,10 +53,6 @@ namespace Movies.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Movie movie)
         {
-            if (movie.PosterToUpload != null)
-            {
-                ValidateIMGUpload(movie);
-            }
             if (ModelState.IsValid)
             {
                 await _movieRepository.AddAsync(movie);
@@ -85,12 +80,7 @@ namespace Movies.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Movie movie)
-        {
-            if (movie.PosterToUpload != null)
-            {
-                ValidateIMGUpload(movie);
-            }
-
+        {          
             if (ModelState.IsValid)
             {
                 await _movieRepository.UpdateAsync(movie);
@@ -123,13 +113,5 @@ namespace Movies.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private void ValidateIMGUpload(Movie movie)
-        {
-            var ext = Path.GetExtension(movie.PosterToUpload.FileName).ToLowerInvariant();
-            if (!permittedExtensions.Contains(ext))
-            {
-                ModelState.AddModelError(nameof(movie.PosterToUpload), "Only supported Image formats are JPG and PNG");
-            }
-        }
     }
 }
