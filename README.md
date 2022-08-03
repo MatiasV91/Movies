@@ -1,7 +1,7 @@
-CRUD Movie App
+# CRUD Movie App
 
 
-Utiliza C# y ASP .Net Core 5
+Hecho en C# y ASP .Net Core 5
 
 Muestra peliculas en la base de datos, permite busqueda y loguearte a una cuenta para administrar pudiendo crear, editar y borrar peliculas
 
