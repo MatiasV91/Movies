@@ -6,7 +6,6 @@ Hecho en C# y ASP .Net Core 3.1
 Muestra peliculas en la base de datos, permite busqueda y loguearte a una cuenta para administrar pudiendo crear, editar y borrar peliculas
 
 
-[DEMO](https://movies-mv.herokuapp.com/)
 
 ![alt text](https://github.com/MatiasV91/Movies/blob/master/github/Homepage.PNG)
 ![alt text](https://github.com/MatiasV91/Movies/blob/master/github/Search.PNG)
